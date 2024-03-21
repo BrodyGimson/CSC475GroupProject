@@ -16,6 +16,8 @@ jupyter notebook
 # Dataset Used for Training
 For training our model we used the guitar effects found in the IDMT-SFT-Audio-Effects dataset here: https://www.idmt.fraunhofer.de/en/publications/datasets/audio_effects.html [1].
 
+The folder name expected is "dataset" followed by the following structure:
+
 # References
 <div style="text-indent: -36px; padding-left: 36px;">
     <p>
