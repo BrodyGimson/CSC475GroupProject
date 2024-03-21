@@ -21,7 +21,7 @@ The folder name expected is "dataset" followed by the following structure:
     - monophonic
         - *Monophonic 1 and 2 dataset contents which should have a "Lists" and a "Samples" folder**
     - polyphonic
-        - *Polyphonic 1 and 2 dataset contents which should have a "Lists" and a "Samples" folder*
+        - *Polyphonic 1 and 2 (note effects are outisde the samples folder, so you must move them in) dataset contents which should have a "Lists" and a "Samples" folder*
 
 # References
 <div style="text-indent: -36px; padding-left: 36px;">
