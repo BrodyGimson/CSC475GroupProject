@@ -17,6 +17,11 @@ jupyter notebook
 For training our model we used the guitar effects found in the IDMT-SFT-Audio-Effects dataset here: https://www.idmt.fraunhofer.de/en/publications/datasets/audio_effects.html [1].
 
 The folder name expected is "dataset" followed by the following structure:
+- dataset
+    - monophonic
+        - *Monophonic 1 and 2 dataset contents which should have a "Lists" and a "Samples" folder**
+    - polyphonic
+        - *Polyphonic 1 and 2 dataset contents which should have a "Lists" and a "Samples" folder*
 
 # References
 <div style="text-indent: -36px; padding-left: 36px;">
