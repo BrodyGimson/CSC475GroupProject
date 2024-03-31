@@ -4,3 +4,4 @@ jupyter
 torch
 torchaudio
 ipython
+pandas
