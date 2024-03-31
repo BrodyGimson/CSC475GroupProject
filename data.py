@@ -10,17 +10,18 @@ import os, random
 #
 # Input:
 #   effect - String
-#       Effect name, must be same as folders in dataset.
+#       Effect name, must be same as folder name in dataset.
 #   metadata_path - String
 #       Path to metadata csv file.
 #   mu_comp - Boolean - Default True
 #       Specify whether to use mu's law compression.
 #   srate - Integer - Default 22050
-#       Specified srate to load files at.
+#       Specify srate to load files at.
 #   duration - Integer - Default 120
-#       Specified duration of output in seconds.
+#       Specify duration of output in seconds.
 #   type - String - Default "scale"
-#       Type of audio wanted. Options: scale, random, pentatonic (not implemented)
+#       Type of audio wanted. 
+#           Options: scale, random, pentatonic (not implemented)
 #   incl_poly - Boolean - Default True
 #       Choose to include polyphonic sounds in output.
 #
@@ -63,13 +64,12 @@ def create_data(effect, metadata_path, mu_comp=True, srate=22050, duration=120, 
 # -----------------------------------------------------------------------
 # Helper function below are designed to be used only in this module.
 
-# Simply puts notes in order, up to the duration, into one audio stream.
+# Puts notes in order, up to the duration, into one audio stream.
 def _create_scale(audio_path, metadata_path, srate, duration):
     audio = []
 
     max_length = duration * srate
 
-    # Sort files as listdir puts them in random order dependent on OS.
     file_paths = sorted(os.listdir(audio_path))
 
     # TODO: Update logic to incorporate tagging and fix below.
@@ -88,7 +88,7 @@ def _create_scale(audio_path, metadata_path, srate, duration):
 
     return audio
 
-# Simply chooses a random file each time till the duration of audio is achieved.
+# Chooses a random file each time till the duration of audio is achieved.
 def _create_random(clean_path, effect_path, metadata_path, srate, duration):
     clean_audio = []
     effect_audio = []
@@ -115,10 +115,10 @@ def _create_random(clean_path, effect_path, metadata_path, srate, duration):
 
     return clean_audio, effect_audio
 
-# Creates a solo-like tune based on the pentatonic scale.
+# Creates a solo-like tune based on a pentatonic scale.
 # Chooses a random starting value on the low E string from the files, then maps out 
 # the appropriate pentatonic scale.
-# From the scale it chooses random notes to create the audio up to the duration.
+# From that scale it chooses random notes to create the audio up to the duration.
 def _create_pentatonic(clean_path, effect_path, metadata_path, srate, duration):
     clean_audio = []
     effect_audio = []
