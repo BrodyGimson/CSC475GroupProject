@@ -20,7 +20,7 @@ import os, random
 #   duration - Integer - Default 120
 #       Specified duration of output in seconds.
 #   type - String - Default "scale"
-#       Type of audio wanted. Options: scale, random (not implemented), pentatonic (not implemented)
+#       Type of audio wanted. Options: scale, random, pentatonic (not implemented)
 #   incl_poly - Boolean - Default True
 #       Choose to include polyphonic sounds in output.
 #
@@ -90,19 +90,38 @@ def _create_scale(audio_path, metadata_path, srate, duration):
 
 # Simply chooses a random file each time till the duration of audio is achieved.
 def _create_random(clean_path, effect_path, metadata_path, srate, duration):
-    audio = []
+    clean_audio = []
+    effect_audio = []
 
     max_length = duration * srate
 
-    print("Random type not implemented yet.")
-    return []
+    clean_file_paths = sorted(os.listdir(clean_path))
+    effect_file_paths = sorted(os.listdir(effect_path))
+
+    while len(clean_audio) < max_length:
+        index = random.randint(0, len(clean_file_paths))
+
+        clean_file = os.path.join(clean_path, clean_file_paths[index])
+
+        # TODO: Update with tags
+        # Use *3 to deal with the 3 effect strengths
+        effect_file = os.path.join(effect_path, effect_file_paths[index*3])
+
+        clean_note, _ = lib.load(clean_file, sr=srate)
+        effect_note, _ = lib.load(effect_file, sr=srate)
+
+        clean_audio = np.hstack([clean_audio, clean_note])
+        effect_audio = np.hstack([effect_audio, effect_note])
+
+    return clean_audio, effect_audio
 
 # Creates a solo-like tune based on the pentatonic scale.
 # Chooses a random starting value on the low E string from the files, then maps out 
 # the appropriate pentatonic scale.
 # From the scale it chooses random notes to create the audio up to the duration.
 def _create_pentatonic(clean_path, effect_path, metadata_path, srate, duration):
-    audio = []
+    clean_audio = []
+    effect_audio = []
 
     max_length = duration * srate
 
