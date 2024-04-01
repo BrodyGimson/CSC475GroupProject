@@ -18,6 +18,10 @@ For training our model we used the guitar effects found in the IDMT-SFT-Audio-Ef
 
 The folder name expected is "dataset" followed by the following structure:
 - dataset
+    - experiments
+        - *Used to store experiment results and wav files*
+    - models
+        - *Used to store .keras models that are made*
     - monophonic
         - *Monophonic 1 and 2 dataset contents which should have a "Lists" and a "Samples" folder**
     - polyphonic
