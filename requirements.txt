@@ -1,6 +1,10 @@
-numpy
-librosa
-jupyter
-torch
-torchaudio
 ipython
+jupyter
+keras
+librosa
+matplotlib
+numpy
+pandas
+scipy
+scikit-learn
+tensorflow
