@@ -60,16 +60,45 @@ def effect_table_creation(path):
         effectDict['fxSettingID'].append(fxsettingID)
         effectDict['fxType'].append(fxtype)
         effectDict['fxTypeID'].append(fxtypeID)
-
-        if fxsettingID == '1':
-            effectDict['genre'].append('indie')
-        elif fxsettingID == '2':
-            effectDict['genre'].append('rock')
-        elif fxsettingID == '3':
-            effectDict['genre'].append('metal')
-        else:
-            effectDict['genre'].append('other')
-            
+        
+        genre = ""
+        match fxsettingID: 
+            case "1":
+                genre += ""
+            case "2":
+                genre += "Alternative "
+            case "3":
+                genre += "Heavy "
+            case default:
+                genre += ""
+        match fxtypeID:
+            case "31":
+                genre += "90s Rock"
+            case "32":
+                genre += "Classic Rock"
+            case "35":
+                genre += "Indie"
+            case "33":
+                genre += "70s Rock"
+            case "34":
+                genre += "Southern Rock"
+            case "22":
+                genre += "Country"
+            case "21":
+                genre += "80s Pop"
+            case "42":
+                genre += " Rock"
+            case "41":
+                genre += "Metal"
+            case "23":
+                genre += "Physcodelic"
+            case "12":
+                genre += "Rock & Roll"
+            case "11":
+                genre += "Folk"
+            case default:
+                genre += ""
+        
         param_info = fxinformation.find('.//paraminformation')
         if param_info is not None:
             paramNameList = []
@@ -77,12 +106,18 @@ def effect_table_creation(path):
             for param in param_info.findall('.//parameter'):
                 param_name = param.find('name').text
                 param_value = param.find('value').text
+                match param_value:
+                    case "4x12":
+                        genre += "/indie"
                 paramNameList.append(param_name)
                 paramIDList.append(param_value)
             effectDict['paramName'].append(paramNameList)
             effectDict['paramID'].append(paramIDList)
-    
-    create_csv(effectDict, "effectData.csv")
+            
+        effectDict['genre'].append(genre)
+        print(f"The Genre is: {genre}")
+            
+    #create_csv(effectDict, "effectData.csv")
 """
 effect_xml_files: Main function is to produce a list of the first 3 files in each
                   Genre folder, this is done because the first 3 files contain all
@@ -111,7 +146,7 @@ def main():
     for file in fnames:
         path = file
         fileData = file_parse_xml(path)
-        create_csv(fileData, "fileData.csv") 
+       #create_csv(fileData, "fileData.csv") 
         
     fnameList = effect_xml_file(root)
     
