@@ -115,9 +115,8 @@ def effect_table_creation(path):
             effectDict['paramID'].append(paramIDList)
             
         effectDict['genre'].append(genre)
-        print(f"The Genre is: {genre}")
             
-    #create_csv(effectDict, "effectData.csv")
+    create_csv(effectDict, "effectData.csv")
 """
 effect_xml_files: Main function is to produce a list of the first 3 files in each
                   Genre folder, this is done because the first 3 files contain all
@@ -146,7 +145,7 @@ def main():
     for file in fnames:
         path = file
         fileData = file_parse_xml(path)
-       #create_csv(fileData, "fileData.csv") 
+        create_csv(fileData, "fileData.csv") 
         
     fnameList = effect_xml_file(root)
     
