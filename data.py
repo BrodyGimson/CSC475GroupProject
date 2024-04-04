@@ -21,7 +21,7 @@ import os, random
 #       Specify duration of output in seconds.
 #   type - String - Default "scale"
 #       Type of audio wanted. 
-#           Options: scale, random, pentatonic (not implemented)
+#           Options: scale, random, pentatonic
 #   incl_poly - Boolean - Default True
 #       Choose to include polyphonic sounds in output.
 #
@@ -49,16 +49,19 @@ def create_data(genre, effect_data_path, file_data_path, mu_comp=True, srate=220
     clean_path = os.path.join(mono_sample_path, "NoFX")
     effect_path = os.path.join(mono_sample_path, effect_df.fxType)
 
+    # For both, use picking for play style and instrument 9 (the stratocaster)
     # Only grab files that match the genre given
     file_effect_df = file_df[
         ( file_df.playStyle == 3 ) &
+        ( file_df.instrumentSetting == 9 ) &
         ( file_df.fxType == effect_df.fxTypeID ) &
         ( file_df.fxSetting == effect_df.fxSettingID )
     ]
 
-    # Only select picking style and no effect
+    # Only select no effect
     file_clean_df = file_df[
         ( file_df.playStyle == 3 ) &
+        ( file_df.instrumentSetting == 9 ) &
         ( file_df.fxType == 11 )
     ]
 
@@ -138,14 +141,42 @@ def _create_random(clean_path, effect_path, file_clean_df, file_effect_df, srate
 # Chooses a random starting value on the low E string from the files, then maps out 
 # the appropriate pentatonic scale.
 # From that scale it chooses random notes to create the audio up to the duration.
-def _create_pentatonic(clean_path, effect_path, file_df, srate, duration):
-    clean_audio = []
-    effect_audio = []
+def _create_pentatonic(clean_path, effect_path, file_clean_df, file_effect_df, srate, duration):
 
-    max_length = duration * srate
+    # 9 because dataset goes up to fret 12 on each string and we want whole scale
+    start_fret = random.randint(0, 9)
 
-    print("Pentatonic type not implemented yet.")
-    return []
+    file_clean_df = file_clean_df[
+        ((file_clean_df.string) == 1 & (file_clean_df.fret == start_fret)) |
+        ((file_clean_df.string == 1) & (file_clean_df.fret == start_fret + 3)) |
+        ((file_clean_df.string == 2) & (file_clean_df.fret == start_fret)) |
+        ((file_clean_df.string == 2) & (file_clean_df.fret == start_fret + 2)) |
+        ((file_clean_df.string == 3) & (file_clean_df.fret == start_fret)) |
+        ((file_clean_df.string == 3) & (file_clean_df.fret == start_fret + 2)) |
+        ((file_clean_df.string == 4) & (file_clean_df.fret == start_fret)) |
+        ((file_clean_df.string == 4) & (file_clean_df.fret == start_fret + 2)) |
+        ((file_clean_df.string == 5) & (file_clean_df.fret == start_fret)) |
+        ((file_clean_df.string == 5) & (file_clean_df.fret == start_fret + 3)) |
+        ((file_clean_df.string == 6) & (file_clean_df.fret == start_fret)) |
+        ((file_clean_df.string == 6) & (file_clean_df.fret == start_fret + 3))
+    ]
+
+    file_effect_df = file_effect_df[
+        ((file_effect_df.string == 1) & (file_effect_df.fret == start_fret)) |
+        ((file_effect_df.string == 1) & (file_effect_df.fret == start_fret + 3)) |
+        ((file_effect_df.string == 2) & (file_effect_df.fret == start_fret)) |
+        ((file_effect_df.string == 2) & (file_effect_df.fret == start_fret + 2)) |
+        ((file_effect_df.string == 3) & (file_effect_df.fret == start_fret)) |
+        ((file_effect_df.string == 3) & (file_effect_df.fret == start_fret + 2)) |
+        ((file_effect_df.string == 4) & (file_effect_df.fret == start_fret)) |
+        ((file_effect_df.string == 4) & (file_effect_df.fret == start_fret + 2)) |
+        ((file_effect_df.string == 5) & (file_effect_df.fret == start_fret)) |
+        ((file_effect_df.string == 5) & (file_effect_df.fret == start_fret + 3)) |
+        ((file_effect_df.string == 6) & (file_effect_df.fret == start_fret)) |
+        ((file_effect_df.string == 6) & (file_effect_df.fret == start_fret + 3))
+    ]
+
+    return _create_random(clean_path, effect_path, file_clean_df, file_effect_df, srate, duration)
 
 # Cleans up notes and changes their duration.
 def process_note(note, note_length, srate):
