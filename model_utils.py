@@ -71,7 +71,7 @@ def normalized_esr(true, predicted):
 
 # Change data to format expected by the model
 # Non-sequential version
-def create_dataset(input_file, output_file, size_training, size_test, frame, sr, test_ratio):
+def create_dataset(input_file, output_file, size_training, size_test, frame, sr, test_ratio, label=None):
     signal = input_file
     wet = output_file
     
@@ -96,7 +96,8 @@ def create_dataset(input_file, output_file, size_training, size_test, frame, sr,
 
     # Creating the training set (randomly pulling frames and target value from all segments in train set)
     features_train = np.zeros((size_training, frame))
-    targets_train = np.zeros((size_training))
+    targets_train = np.zeros((size_training, frame))
+    labels_train = np.zeros((size_training))
     counter = 0
 
     for i in range(size_training):
@@ -106,12 +107,16 @@ def create_dataset(input_file, output_file, size_training, size_test, frame, sr,
         random_start = random.randint(0,segment_size-frame-2)
         features = dry_slice[random_start:random_start+frame]
         target = wet_slice[random_start+frame-1]
-        features_train[counter,:], targets_train[counter] = features, target
+        if (label == None):
+            features_train[counter,:], targets_train[counter,:] = features, target
+        else:
+            pass
         counter += 1
 
     # Creating the testing set (randomly puling frames and target value from segments in test set)
     features_test = np.zeros((size_test, frame))
-    targets_test = np.zeros((size_test))
+    targets_test = np.zeros((size_test, frame))
+    labels_test = np.zeros((size_training))
     counter = 0
 
     for i in range(size_test):
@@ -121,7 +126,10 @@ def create_dataset(input_file, output_file, size_training, size_test, frame, sr,
         random_start = random.randint(0,segment_size-frame-2)
         features = dry_slice[random_start:random_start+frame]
         target = wet_slice[random_start+frame-1]
-        features_test[counter,:], targets_test[counter] = features, target
+        if (label == None):
+            features_test[counter,:], targets_test[counter,:] = features, target
+        else:
+            pass
         counter += 1
 
     return dry_test, wet_test, features_train, features_test, targets_train, targets_test
